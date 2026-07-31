@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "./button"
 import useTokenStore from "@/store"
+import { Link } from "react-router"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
@@ -90,7 +91,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                <Link to={"/dashboard/me"}>Account</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />

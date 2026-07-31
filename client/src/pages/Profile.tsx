@@ -2,8 +2,8 @@
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge, Calendar, MapPin } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, MapPin } from "lucide-react";
 
 function Profile() {
     return (
@@ -43,20 +43,26 @@ function Profile() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 px-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 dark:*:data-[slot=card]:bg-card">
+                <div className="grid grid-cols-2 gap-4 px-4 *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 dark:*:data-[slot=card]:bg-card">
                     <Card className="@container/card">
                         <CardHeader>
-                            <CardDescription>Post</CardDescription>
+                            <div className="flex justify-between items-center">
+                                <CardDescription className="mb-3">Number of Books</CardDescription>
+                                <CardDescription className="mb-3 text-green-500">+5 this month</CardDescription>
+                            </div>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                269
+                                69
                             </CardTitle>
                         </CardHeader>
                     </Card>
                     <Card className="@container/card">
                         <CardHeader>
-                            <CardDescription>Post</CardDescription>
+                            <div className="flex justify-between items-center">
+                                <CardDescription className="mb-3">Profile Visits</CardDescription>
+                                <CardDescription className="mb-3 text-green-500">+29.7k this month</CardDescription>
+                            </div>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                269
+                                269k
                             </CardTitle>
                         </CardHeader>
                     </Card>
