@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { BookModel } from "./bookModel.ts";
 import createHttpError from "http-errors";
 import path from "node:path";
@@ -210,6 +211,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
             resource_type: "raw",
         });
 
+        await DownloadModel.deleteMany({ book: new Types.ObjectId(String(bookId)) });
         await BookModel.deleteOne({ _id: String(bookId) });
 
         res.status(200).json({

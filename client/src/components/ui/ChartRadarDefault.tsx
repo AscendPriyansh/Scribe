@@ -45,9 +45,9 @@ export function ChartRadarDefault({ data = [] }: { data: GenreSlice[] }) {
       <CardContent className="pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[380px]"
         >
-          <RadarChart data={chartData}>
+          <RadarChart data={chartData} margin={{ top: 20, right: 48, bottom: 20, left: 48 }}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <PolarAngleAxis dataKey="month" />
             <PolarGrid />

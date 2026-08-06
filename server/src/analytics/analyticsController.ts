@@ -46,7 +46,15 @@ const recordVisit = async (req: Request, res: Response, next: NextFunction) => {
             return next(createHttpError(401, "Unauthorized."));
         }
 
-        await VisitModel.create({ user: _req.userId });
+        const visitorId = _req.userId;
+        const ownerId = (req.body?.userId as string | undefined) ?? visitorId;
+        const date = new Date().toISOString().slice(0, 10);
+
+        await VisitModel.updateOne(
+            { owner: ownerId, visitor: visitorId, date },
+            { $setOnInsert: { owner: ownerId, visitor: visitorId, date } },
+            { upsert: true }
+        );
 
         return res.status(201).json({ message: "Visit recorded." });
     } catch (err) {
@@ -69,7 +77,7 @@ const getDashboardStats = async (req: Request, res: Response, next: NextFunction
 
         const [profileVisits, totalDownloads, myBooksCount, downloadsByBookAgg, downloadsByGenreAgg, usersPerMonthAgg, downloadsPerMonthAgg] =
             await Promise.all([
-                VisitModel.countDocuments({ user: _req.userId }),
+                VisitModel.countDocuments({ owner: _req.userId }),
                 DownloadModel.countDocuments(bookIdMatch),
                 BookModel.countDocuments(authorFilter),
                 DownloadModel.aggregate<DownloadBookGroup>([
