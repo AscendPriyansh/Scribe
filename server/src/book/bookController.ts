@@ -226,7 +226,7 @@ const downloadBook = async (req: Request, res: Response, next: NextFunction) => 
 
         const cloudinaryResponse = await fetch(book.file);
         if (!cloudinaryResponse.ok || !cloudinaryResponse.body) {
-            return next(createHttpError(502, `Failed to fetch file from storage. Status: ${cloudinaryResponse.status}. URL: ${book.file}`));
+            return next(createHttpError(502, "Failed to fetch file from storage."));
         }
 
         res.setHeader("Content-Type", "application/pdf");
@@ -234,8 +234,7 @@ const downloadBook = async (req: Request, res: Response, next: NextFunction) => 
 
         Readable.fromWeb(cloudinaryResponse.body as any).pipe(res);
     } catch (err) {
-        console.error("Download error:", (err as Error).message);
-        return next(createHttpError(500, `Error while downloading a book: ${(err as Error).message}`));
+        return next(createHttpError(500, "Error while downloading a book"));
     }
 }
 
