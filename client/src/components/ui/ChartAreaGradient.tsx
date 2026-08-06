@@ -18,22 +18,22 @@ import {
 
 export const description = "An area chart with gradient fill"
 
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+const defaultChartData = [
+    { month: "January", users: 0, downloads: 0 },
+    { month: "February", users: 0, downloads: 0 },
+    { month: "March", users: 0, downloads: 0 },
+    { month: "April", users: 0, downloads: 0 },
+    { month: "May", users: 0, downloads: 0 },
+    { month: "June", users: 0, downloads: 0 },
 ]
 
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    users: {
+        label: "Users",
         color: "var(--chart-1)",
     },
-    mobile: {
-        label: "Mobile",
+    downloads: {
+        label: "Downloads",
         color: "var(--chart-2)",
     },
 } satisfies ChartConfig
@@ -41,9 +41,14 @@ const chartConfig = {
 type ChartAreaGradientProps = {
     title: string
     description: string
+    data?: { month: string; users: number; downloads: number }[]
 }
 
-export function ChartAreaGradient({ title, description }: ChartAreaGradientProps) {
+export function ChartAreaGradient({ title, description, data }: ChartAreaGradientProps) {
+    const chartData = data ?? defaultChartData
+    const totalUsers = chartData.reduce((sum, d) => sum + d.users, 0)
+    const totalDownloads = chartData.reduce((sum, d) => sum + d.downloads, 0)
+
     return (
         <Card className="w-full">
             <CardHeader>
@@ -72,45 +77,45 @@ export function ChartAreaGradient({ title, description }: ChartAreaGradientProps
                         />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
                         <defs>
-                            <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="fillUsers" x1="0" y1="0" x2="0" y2="1">
                                 <stop
                                     offset="5%"
-                                    stopColor="var(--color-desktop)"
+                                    stopColor="var(--color-users)"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="var(--color-desktop)"
+                                    stopColor="var(--color-users)"
                                     stopOpacity={0.1}
                                 />
                             </linearGradient>
-                            <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="fillDownloads" x1="0" y1="0" x2="0" y2="1">
                                 <stop
                                     offset="5%"
-                                    stopColor="var(--color-mobile)"
+                                    stopColor="var(--color-downloads)"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="var(--color-mobile)"
+                                    stopColor="var(--color-downloads)"
                                     stopOpacity={0.1}
                                 />
                             </linearGradient>
                         </defs>
                         <Area
-                            dataKey="mobile"
+                            dataKey="downloads"
                             type="natural"
-                            fill="url(#fillMobile)"
+                            fill="url(#fillDownloads)"
                             fillOpacity={0.4}
-                            stroke="var(--color-mobile)"
+                            stroke="var(--color-downloads)"
                             stackId="a"
                         />
                         <Area
-                            dataKey="desktop"
+                            dataKey="users"
                             type="natural"
-                            fill="url(#fillDesktop)"
+                            fill="url(#fillUsers)"
                             fillOpacity={0.4}
-                            stroke="var(--color-desktop)"
+                            stroke="var(--color-users)"
                             stackId="a"
                         />
                     </AreaChart>
@@ -120,10 +125,10 @@ export function ChartAreaGradient({ title, description }: ChartAreaGradientProps
                 <div className="flex w-full items-start gap-2 text-sm">
                     <div className="grid gap-2">
                         <div className="flex items-center gap-2 leading-none font-medium">
-                            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                            {totalUsers} new users and {totalDownloads} downloads this period <TrendingUp className="h-4 w-4" />
                         </div>
                         <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                            January - June 2024
+                            Last 6 months
                         </div>
                     </div>
                 </div>

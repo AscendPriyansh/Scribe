@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import {
   Label,
   PolarGrid,
@@ -24,26 +23,26 @@ import {
 
 export const description = "A radial chart with text"
 
-const chartData = [
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-]
-
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: "Visits",
   },
   safari: {
-    label: "Safari",
+    label: "Visits",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 
-export function ChartRadialText() {
+export function ChartRadialText({ value = 0, label = "Visits" }: { value?: number; label?: string }) {
+  const chartData = [
+    { browser: "safari", visitors: value, fill: "var(--color-safari)" },
+  ]
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart - Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Profile Visits</CardTitle>
+        <CardDescription>Total visits to your profile</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -88,7 +87,7 @@ export function ChartRadialText() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          {label}
                         </tspan>
                       </text>
                     )
@@ -100,11 +99,8 @@ export function ChartRadialText() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Recorded when someone opens your profile
         </div>
       </CardFooter>
     </Card>

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "@/http/api";
+import { getProfile, getDashboardStats, recordProfileVisit } from "@/http/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -12,6 +13,16 @@ function Profile() {
         queryKey: ['profile'],
         queryFn: getProfile,
     });
+
+    const { data: statsData } = useQuery({
+        queryKey: ['dashboard-stats'],
+        queryFn: getDashboardStats,
+        staleTime: 30000,
+    });
+
+    useEffect(() => {
+        recordProfileVisit().catch(() => {});
+    }, []);
 
     const user = data?.data?.user;
     const name = user?.name ?? "User";
@@ -77,10 +88,10 @@ function Profile() {
                         <CardHeader>
                             <div className="flex justify-between items-center">
                                 <CardDescription className="mb-3">Number of Books</CardDescription>
-                                <CardDescription className="mb-3 text-green-500">+5 this month</CardDescription>
+                                <CardDescription className="mb-3 text-green-500">Published</CardDescription>
                             </div>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                69
+                                {statsData?.data?.myBooksCount ?? 0}
                             </CardTitle>
                         </CardHeader>
                     </Card>
@@ -88,10 +99,10 @@ function Profile() {
                         <CardHeader>
                             <div className="flex justify-between items-center">
                                 <CardDescription className="mb-3">Profile Visits</CardDescription>
-                                <CardDescription className="mb-3 text-green-500">+29.7k this month</CardDescription>
+                                <CardDescription className="mb-3 text-green-500">All time</CardDescription>
                             </div>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                269k
+                                {statsData?.data?.profileVisits?.toLocaleString() ?? "0"}
                             </CardTitle>
                         </CardHeader>
                     </Card>

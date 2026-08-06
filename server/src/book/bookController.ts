@@ -5,6 +5,7 @@ import path from "node:path";
 import { Readable } from "node:stream";
 import cloudinary from "../config/cloudinary.ts";
 import type { AuthRequest } from "../middleware/authentication.ts";
+import { DownloadModel } from "../analytics/analyticsModel.ts";
 
 const directory = import.meta.dirname;
 
@@ -231,6 +232,8 @@ const downloadBook = async (req: Request, res: Response, next: NextFunction) => 
 
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", `attachment; filename="${book.title}.pdf"`);
+
+        await DownloadModel.create({ book: book._id });
 
         Readable.fromWeb(cloudinaryResponse.body as any).pipe(res);
     } catch (err) {

@@ -56,3 +56,11 @@ export const getProfile = async () => {
 export const downloadBook = async (bookId: string) => {
     return api.get(`/api/book/${bookId}/download`, { responseType: "blob" });
 };
+
+export const recordProfileVisit = async () => {
+    return api.post("/api/analytics/visit");
+};
+
+export const getDashboardStats = async () => {
+    return api.get("/api/stats/dashboard");
+};
