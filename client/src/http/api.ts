@@ -50,5 +50,5 @@ export const deleteBook = async (bookId: string) => {
 };
 
 export const getProfile = async () => {
-    return api.get(`/auth/me`);
+    return api.post(`/auth/me`);
 };

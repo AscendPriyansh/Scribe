@@ -7,7 +7,7 @@ import createHttpError from "http-errors";
 
 const Register = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role, location, description } = req.body;
 
         if (!name || !email || !password) {
             return next(createHttpError(400, "Invalid Credentials."));
@@ -24,7 +24,10 @@ const Register = async (req: Request, res: Response, next: NextFunction) => {
         const user = await UserModel.create({
             name: name,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role,
+            location: location,
+            description: description
         });
 
         const { password: _, ...userWithoutPassword } = user.toObject();

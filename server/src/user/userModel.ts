@@ -17,6 +17,18 @@ const userSchema = new Schema<User>({
   password: { 
     type: String, 
     required: true 
+  },
+  role: { 
+    type: String, 
+    trim: true 
+  },
+  location: { 
+    type: String, 
+    trim: true 
+  },
+  description: { 
+    type: String, 
+    trim: true 
   }
 }, { 
   timestamps: true 

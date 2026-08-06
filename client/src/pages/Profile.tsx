@@ -1,4 +1,6 @@
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "@/http/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -6,6 +8,33 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Calendar, MapPin } from "lucide-react";
 
 function Profile() {
+    const { data, isLoading } = useQuery({
+        queryKey: ['profile'],
+        queryFn: getProfile,
+    });
+
+    const user = data?.data?.user;
+    const name = user?.name ?? "User";
+    const role = user?.role ?? "Member";
+    const location = user?.location ?? "Unknown";
+    const dateJoined = user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—";
+    const description = user?.description ?? "No description provided.";
+
+    if (isLoading) {
+        return (
+            <div className="w-full space-y-4 p-4">
+                <Skeleton className="h-40 w-full rounded-lg" />
+                <div className="flex items-center gap-4">
+                    <Skeleton className="h-28 w-28 rounded-full" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-6 w-48" />
+                        <Skeleton className="h-4 w-32" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full">
             <div className="m-4">
@@ -25,21 +54,21 @@ function Profile() {
                     </div>
 
                     <div className="mt-4">
-                        <h1 className="font-bold text-2xl">Priyansh Tiwari</h1>
-                        <p className="text-md text-gray-500">Senior Software Engineer at Vercel</p>
+                        <h1 className="font-bold text-2xl">{name}</h1>
+                        <p className="text-md text-gray-500">{role}</p>
                     </div>
                     <div className="flex gap-4 mt-2">
                         <div className="flex items-center gap-1">
                             <MapPin className="text-md text-gray-500 size-4" />
-                            <h1 className="text-md text-gray-500">San Francisco, CA</h1>
+                            <h1 className="text-md text-gray-500">{location}</h1>
                         </div>
                         <div className="flex items-center gap-1">
                             <Calendar className="text-md text-gray-500 size-4" />
-                            <p className="text-md text-gray-500">Joined March 2021</p>
+                            <p className="text-md text-gray-500">{dateJoined}</p>
                         </div>
                     </div>
                     <div className="flex mt-4">
-                        <p className="text-md text-gray-700">Building the future of web development. Open source contributor, TypeScript enthusiast, and coffee addict. Previously at Stripe and Google.</p>
+                        <p className="text-md text-gray-700">{description}</p>
                     </div>
                 </div>
 
