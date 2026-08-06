@@ -84,7 +84,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                <Link to={"/dashboard/upgrade"}>Upgrade to Pro</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -95,7 +95,7 @@ export function NavUser() {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                <Link to={"/dashboard/billing"}>Billing</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />

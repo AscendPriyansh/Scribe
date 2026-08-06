@@ -8,6 +8,8 @@ import AuthLayout from "@/layouts/AuthLayout";
 import CreateBook from "./pages/CreateBook";
 import EditBook from "./pages/EditBook";
 import Profile from "./pages/Profile";
+import UpgradePage from "./pages/UpgradePage";
+import BillingPage from "./pages/BillingPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: "me",
         element: <Profile/>
+      },
+      {
+        path: "upgrade",
+        element: <UpgradePage/>
+      },
+      {
+        path: "billing",
+        element: <BillingPage/>
       }
     ]
   },
