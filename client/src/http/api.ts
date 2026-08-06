@@ -52,3 +52,7 @@ export const deleteBook = async (bookId: string) => {
 export const getProfile = async () => {
     return api.post(`/auth/me`);
 };
+
+export const downloadBook = async (bookId: string) => {
+    return api.get(`/api/book/${bookId}/download`, { responseType: "blob" });
+};

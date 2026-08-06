@@ -31,7 +31,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { getBooks, deleteBook } from '@/http/api';
+import { getBooks, deleteBook, downloadBook } from '@/http/api';
 import type { Book } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CirclePlus, LoaderCircle, MoreHorizontal } from 'lucide-react';
@@ -77,6 +77,16 @@ const BooksPage = () => {
         if (confirm('Are you sure you want to delete this book?')) {
             deleteMutation.mutate(bookId);
         }
+    };
+
+    const handleDownload = async (book: Book) => {
+        const res = await downloadBook(book._id);
+        const url = URL.createObjectURL(res.data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${book.title}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -202,6 +212,7 @@ const BooksPage = () => {
                                                             </Link>
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => handleDelete(book._id)}>Delete</DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleDownload(book)}>Download</DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </TableCell>

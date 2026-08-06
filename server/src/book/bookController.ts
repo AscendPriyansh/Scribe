@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { BookModel } from "./bookModel.ts";
 import createHttpError from "http-errors";
 import path from "node:path";
+import { Readable } from "node:stream";
 import cloudinary from "../config/cloudinary.ts";
 import type { AuthRequest } from "../middleware/authentication.ts";
 
@@ -95,14 +96,14 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         if (files?.file?.[0]) {
             const bookFileName = files.file[0].filename;
             const bookFilePath = path.resolve(directory, "../../public/data/uploads", bookFileName);
-            completeFileName = bookFileName;
 
             const bookFileUploadResult = await cloudinary.uploader.upload(bookFilePath, {
                 resource_type: "raw",
-                filename_override: completeFileName,
+                filename_override: bookFileName,
                 folder: "book-pdfs",
                 format: "pdf"
             });
+            completeFileName = bookFileUploadResult.secure_url;
         }
 
         const updatedBook = await BookModel.findByIdAndUpdate(
@@ -214,4 +215,28 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-export { createBook, updateBook, listBook, getSingleBook, deleteBook };
+const downloadBook = async (req: Request, res: Response, next: NextFunction) => {
+    const bookId = req.params.bookId;
+
+    try {
+        const book = await BookModel.findById(bookId);
+        if (!book) {
+            return next(createHttpError(404, "Book not found."));
+        }
+
+        const cloudinaryResponse = await fetch(book.file);
+        if (!cloudinaryResponse.ok || !cloudinaryResponse.body) {
+            return next(createHttpError(502, `Failed to fetch file from storage. Status: ${cloudinaryResponse.status}. URL: ${book.file}`));
+        }
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename="${book.title}.pdf"`);
+
+        Readable.fromWeb(cloudinaryResponse.body as any).pipe(res);
+    } catch (err) {
+        console.error("Download error:", (err as Error).message);
+        return next(createHttpError(500, `Error while downloading a book: ${(err as Error).message}`));
+    }
+}
+
+export { createBook, updateBook, listBook, getSingleBook, deleteBook, downloadBook };
