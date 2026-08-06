@@ -185,7 +185,11 @@ const BooksPage = () => {
                                             </TableCell>
                                             <TableCell className="font-medium">{book.title}</TableCell>
                                             <TableCell>
-                                                <Badge variant={"default"}>{book.genre}</Badge>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {(Array.isArray(book.genre) ? book.genre : [book.genre]).map((g) => (
+                                                        <Badge key={g} variant={"default"}>{g}</Badge>
+                                                    ))}
+                                                </div>
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell">
                                                 {book.author?.name ?? 'Unknown'}

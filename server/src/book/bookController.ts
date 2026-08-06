@@ -10,9 +10,11 @@ import { DownloadModel } from "../analytics/analyticsModel.ts";
 const directory = import.meta.dirname;
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, genre } = req.body;
+    const { title, description } = req.body;
+    const rawGenres = req.body.genre;
+    const genres = Array.isArray(rawGenres) ? rawGenres : rawGenres ? [rawGenres] : [];
 
-    if (!title || !description || !genre) {
+    if (!title || !description || genres.length === 0) {
         return next(createHttpError(400, "Credentials required."));
     }
 
@@ -47,7 +49,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
             title: title,
             description: description,
             author: { _id: _req.userId },
-            genre: genre,
+            genre: genres,
             coverImage: uploadResult.secure_url,
             file: bookFileUploadResult.secure_url,
         });
@@ -62,7 +64,9 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, genre } = req.body;
+    const { title, description } = req.body;
+    const rawGenres = req.body.genre;
+    const genres = Array.isArray(rawGenres) ? rawGenres : rawGenres ? [rawGenres] : [];
     const bookId = req.params.bookId;
 
     try {
@@ -114,7 +118,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
             {
                 title: title,
                 description: description,
-                genre: genre,
+                genre: genres.length > 0 ? genres : book.genre,
                 coverImage: completeCoverImage
                     ? completeCoverImage
                     : book.coverImage,

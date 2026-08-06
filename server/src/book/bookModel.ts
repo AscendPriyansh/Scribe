@@ -17,7 +17,7 @@ const bookSchema = new Schema<Book>({
         required: true
     },
     genre: {
-        type: String,
+        type: [String],
         required: true,
     },
     coverImage: {

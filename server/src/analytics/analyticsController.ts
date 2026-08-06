@@ -89,6 +89,7 @@ const getDashboardStats = async (req: Request, res: Response, next: NextFunction
                         },
                     },
                     { $unwind: "$bookInfo" },
+                    { $unwind: "$bookInfo.genre" },
                     { $group: { _id: "$bookInfo.genre", value: { $sum: 1 } } },
                     { $sort: { value: -1 } },
                 ]),

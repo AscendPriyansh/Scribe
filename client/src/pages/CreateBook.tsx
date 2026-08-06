@@ -18,6 +18,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CircleCheck, CircleX, LoaderCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import { Field, FieldContent,  FieldGroup, FieldLabel } from '@/components/ui/field';
+import { GENRES } from '@/lib/genres';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -26,8 +28,10 @@ const formSchema = z.object({
     description: z.string().min(2, {
         message: 'Description must be at least 2 characters.',
     }),
-    genre: z.string().min(2, {
-        message: 'Genre must be at least 2 characters.',
+    genre: z.array(z.string()).min(1, {
+        message: 'Select at least one genre.',
+    }).max(3, {
+        message: 'You can select up to 3 genres.',
     }),
     coverImage: z.instanceof(FileList).refine((file) => {
         return file.length == 1;
@@ -45,9 +49,22 @@ const CreateBook = () => {
         defaultValues: {
             title: '',
             description: '',
-            genre: '',
+            genre: [],
         },
     });
+
+    const selectedGenres = form.watch('genre');
+
+    const toggleGenre = (genre: string) => {
+        const current = form.getValues('genre');
+        if (!current.includes(genre) && current.length >= 3) {
+            return;
+        }
+        const next = current.includes(genre)
+            ? current.filter((g) => g !== genre)
+            : [...current, genre];
+        form.setValue('genre', next, { shouldValidate: true });
+    };
 
     const coverImageRef = form.register('coverImage');
     const fileRef = form.register('file');
@@ -70,7 +87,7 @@ const CreateBook = () => {
     function onSubmit(values: z.infer<typeof formSchema>) {
         const formdata = new FormData();
         formdata.append('title', values.title);
-        formdata.append('genre', values.genre);
+        values.genre.forEach((g) => formdata.append('genre', g));
         formdata.append('description', values.description);
         formdata.append('coverImage', values.coverImage[0]);
         formdata.append('file', values.file[0]);
@@ -136,9 +153,25 @@ const CreateBook = () => {
 
                             <Field>
                                 <FieldContent>
-                                    <FieldLabel>Genre</FieldLabel>
-                                    <FieldGroup>
-                                        <Input type="text" className="w-full" {...form.register('genre')} />
+                                    <FieldLabel className="mb-1.5">Genre (max 3)</FieldLabel>
+                                    <FieldGroup className="flex flex-row flex-wrap gap-2">
+                                        {GENRES.map((genre) => {
+                                            const isSelected = selectedGenres.includes(genre);
+                                            const isDisabled = !isSelected && selectedGenres.length >= 3;
+                                            return (
+                                                <Button
+                                                    key={genre}
+                                                    type="button"
+                                                    size="xs"
+                                                    variant="outline"
+                                                    disabled={isDisabled}
+                                                    onClick={() => toggleGenre(genre)}
+                                                    className={cn('w-auto rounded-full', isSelected && 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground')}
+                                                >
+                                                    {genre}
+                                                </Button>
+                                            );
+                                        })}
                                     </FieldGroup>
                                     {form.formState.errors.genre && (
                                         <p className="text-sm text-destructive">

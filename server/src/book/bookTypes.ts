@@ -5,7 +5,7 @@ export interface Book {
     title: string,
     description: string,
     author: User,
-    genre: string,
+    genre: string[],
     coverImage: string,
     file: string,
     createdAt: Date;
