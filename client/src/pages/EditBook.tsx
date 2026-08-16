@@ -58,6 +58,7 @@ const EditBook = () => {
         },
     });
 
+    // eslint-disable-next-line react-hooks/incompatible-library
     const selectedGenres = form.watch('genre') ?? [];
 
     const toggleGenre = (genre: string) => {
