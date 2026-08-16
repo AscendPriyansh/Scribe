@@ -11,8 +11,13 @@ import Profile from "./pages/Profile";
 import UpgradePage from "./pages/UpgradePage";
 import BillingPage from "./pages/BillingPage";
 import PublicProfilePage from "./pages/PublicProfilePage";
+import LandingPage from "./pages/LandingPage";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
   {
     path: "dashboard",
     element: <DashboardLayout />,
