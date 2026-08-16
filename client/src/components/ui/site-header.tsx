@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarIcon } from "lucide-react"
-import { SearchForm } from "@/components/ui/search-form"
+import { CommandSearch } from "@/components/ui/command-search"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
@@ -22,7 +22,7 @@ export function SiteHeader() {
         </Button>
         <Separator orientation="vertical" className="mr-2 ml-2 h-auto" />
         <h1 className="font-bold">SCRIBE</h1>
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+        <CommandSearch className="w-full sm:ml-auto sm:w-auto" />
       </div>
     </header>
   )

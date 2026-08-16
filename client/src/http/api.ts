@@ -64,3 +64,11 @@ export const recordProfileVisit = async () => {
 export const getDashboardStats = async () => {
     return api.get("/api/stats/dashboard");
 };
+
+export const searchUsers = async (q: string) => {
+    return api.get("/auth/search", { params: { q } });
+};
+
+export const getUserProfile = async (userId: string) => {
+    return api.get(`/auth/${userId}`);
+};

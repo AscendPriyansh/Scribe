@@ -10,6 +10,7 @@ import EditBook from "./pages/EditBook";
 import Profile from "./pages/Profile";
 import UpgradePage from "./pages/UpgradePage";
 import BillingPage from "./pages/BillingPage";
+import PublicProfilePage from "./pages/PublicProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "me",
         element: <Profile/>
+      },
+      {
+        path: "users/:userId",
+        element: <PublicProfilePage/>
       },
       {
         path: "upgrade",

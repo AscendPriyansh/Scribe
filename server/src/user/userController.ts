@@ -1,5 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { UserModel } from "./userModel.ts";
+import { BookModel } from "../book/bookModel.ts";
 import bcrypt from "bcrypt";
 import { config } from "../config/config.ts";
 import jwt from "jsonwebtoken";
@@ -100,4 +102,64 @@ const Profile = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-export { Register, Login, Profile };
+const SearchUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const query = (req.query.q as string || "").trim();
+
+        if (!query) {
+            return res.status(200).json({ message: "Fetched successfully.", users: [] });
+        }
+
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(escaped.split(/\s+/).join(".*"), "i");
+
+        const users = await UserModel.aggregate([
+            { $match: { $or: [{ name: regex }, { email: regex }] } },
+            { $limit: 20 },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "_id",
+                    foreignField: "author",
+                    as: "books",
+                },
+            },
+            { $unset: "password" },
+            { $addFields: { bookCount: { $size: "$books" } } },
+            { $unset: "books" },
+        ]);
+
+        return res.status(200).json({
+            message: "Fetched successfully.",
+            users,
+        });
+    } catch (err) {
+        return next(createHttpError(500, "Error while searching users."));
+    }
+}
+
+const GetPublicProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.userId;
+
+        const user = await UserModel.findById(userId).select("-password");
+        if (!user) {
+            return next(createHttpError(404, "User not found."));
+        }
+
+        const books = await BookModel.find({ author: new Types.ObjectId(String(userId)) } as any)
+            .populate("author", "name")
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            message: "Profile fetched successfully.",
+            user,
+            books,
+        });
+    } catch (err) {
+        return next(createHttpError(500, "Error while fetching profile."));
+    }
+}
+
+
+export { Register, Login, Profile, SearchUsers, GetPublicProfile };
