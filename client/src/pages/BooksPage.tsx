@@ -279,7 +279,9 @@ const BooksPage = () => {
                             <h3 className="font-bold text-lg">You have no books</h3>
                             <p className="text-xs text-gray-400">You can start selling as soon as you add a book.</p>
                         </div>
-                        <Button type="button">Add Book</Button>
+                        <Link to="/dashboard/books/create">
+                            <Button type="button">Add Book</Button>
+                        </Link>
                     </div>
                 </div>}
 

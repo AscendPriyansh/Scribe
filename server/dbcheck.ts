@@ -1,0 +1,12 @@
+import mongoose from "mongoose";
+import { config } from "./src/config/config.ts";
+await mongoose.connect(config.db_uri as string);
+const Book = mongoose.model("Book", new mongoose.Schema({}, { strict: false }));
+const User = mongoose.model("User", new mongoose.Schema({}, { strict: false }));
+const usersCount = await User.countDocuments();
+const booksCount = await Book.countDocuments();
+const books = await Book.find().limit(3).lean();
+console.log("USERS_COUNT:", usersCount);
+console.log("BOOKS_COUNT:", booksCount);
+console.log("SAMPLE_BOOKS:", JSON.stringify(books, null, 2));
+await mongoose.disconnect();

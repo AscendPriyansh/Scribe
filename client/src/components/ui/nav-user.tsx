@@ -5,7 +5,9 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
+  Moon,
   Sparkles,
+  Sun,
 } from "lucide-react"
 
 import {
@@ -29,11 +31,14 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "./button"
 import useTokenStore from "@/store"
+import { useTheme } from "@/hooks/use-theme"
 import { Link } from "react-router"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
   const user = useTokenStore(state => state.user);
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
   
   const logOutHandler = () => {
     useTokenStore.setState({ token: '', user: null });
@@ -84,6 +89,13 @@ export function NavUser() {
               <DropdownMenuItem>
                 <Sparkles />
                 <Link to={"/dashboard/upgrade"}>Upgrade to Pro</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => toggleTheme?.()}>
+                {isDark ? <Sun /> : <Moon />}
+                {isDark ? "Light mode" : "Dark mode"}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

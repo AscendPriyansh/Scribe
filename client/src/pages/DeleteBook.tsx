@@ -116,11 +116,15 @@ const DeleteBook = () => {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="/dashboard/home">Home</BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
+                                        <Link to="/dashboard/home">Home</Link>
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="/dashboard/books">Books</BreadcrumbLink>
+                                    <BreadcrumbLink asChild>
+                                        <Link to="/dashboard/books">Books</Link>
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>

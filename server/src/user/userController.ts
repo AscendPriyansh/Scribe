@@ -87,7 +87,7 @@ const Profile = async (req: Request, res: Response, next: NextFunction) => {
             return next(createHttpError(403, "Unauthorized Access."));
         }
 
-        const user = await UserModel.findById({_id: userId}).select("-password");
+        const user = await UserModel.findById(userId).select("-password");
         if(!user) {
             return next(createHttpError(404, "User not found."));
         }

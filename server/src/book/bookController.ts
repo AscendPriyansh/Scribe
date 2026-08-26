@@ -49,7 +49,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         const newBook = await BookModel.create({
             title: title,
             description: description,
-            author: { _id: _req.userId },
+            author: new Types.ObjectId(_req.userId),
             genre: genres,
             coverImage: uploadResult.secure_url,
             file: bookFileUploadResult.secure_url,
@@ -71,7 +71,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     const bookId = req.params.bookId;
 
     try {
-        const book = await BookModel.findById({ _id: bookId });
+        const book = await BookModel.findById(bookId);
 
         if (!book) {
             return next(createHttpError(404, "Book Not Found"))
@@ -113,9 +113,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const updatedBook = await BookModel.findByIdAndUpdate(
-            {
-                _id: bookId
-            },
+            bookId,
             {
                 title: title,
                 description: description,
@@ -192,7 +190,8 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const _req = req as AuthRequest;
-        if (book.author._id.toString() !== _req.userId) {
+        const authorId = book.author instanceof Types.ObjectId ? book.author.toString() : (book.author as { _id: string })._id.toString();
+        if (authorId !== _req.userId) {
             return next(createHttpError(403, "You can not Delete others book."));
         }
 
