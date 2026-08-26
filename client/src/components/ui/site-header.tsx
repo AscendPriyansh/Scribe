@@ -21,6 +21,7 @@ export function SiteHeader() {
           <SidebarIcon />
         </Button>
         <Separator orientation="vertical" className="mr-2 ml-2 h-auto" />
+        <img src="/favicon.png" alt="SCRIBE" className="h-6 w-6" />
         <h1 className="font-bold">SCRIBE</h1>
         <CommandSearch className="w-full sm:ml-auto sm:w-auto" />
       </div>

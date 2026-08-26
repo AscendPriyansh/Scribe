@@ -59,6 +59,7 @@ function Login({
                             <form className="p-6 md:p-8">
                                 <FieldGroup>
                                     <div className="flex flex-col items-center gap-2 text-center">
+                                        <img src="/favicon.png" alt="SCRIBE" className="h-10 w-10" />
                                         <h1 className="text-2xl font-bold">Welcome back</h1>
                                         <p className="text-balance text-muted-foreground">
                                             Login to your elib account
@@ -134,7 +135,7 @@ function Login({
                                 <img
                                     src="https://images.unsplash.com/photo-1681836695952-1f8073a7938d?q=80&w=464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                                     alt="Image"
-                                    className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
+                                    className="absolute inset-0 h-full w-full object-contain"
                                 />
                             </div>
                         </CardContent>

@@ -34,10 +34,18 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 
-const productScreens = [
-  { label: "01 / Library overview", title: "Everything worth keeping, in one place.", copy: "Sort books, essays, course material, and field notes into a library that stays useful long after you save it.", image: "/manus-storage/scribe-library-dashboard_76b0fa92.png", alt: "Scribe library dashboard mockup showing books, collections, and reading activity." },
-  { label: "02 / Reading context", title: "A book page that carries the context with it.", copy: "Keep the important details close: author, summary, collections, and your next page, without turning reading into administration.", image: "/manus-storage/scribe-book-detail_693dc27e.png", alt: "Scribe book details mockup with a cover, reading progress, and collection information." },
-  { label: "03 / Contribution flow", title: "Make sharing knowledge feel considered.", copy: "A focused upload flow helps contributors add clear details, useful categories, and reliable context before a resource reaches the community.", image: "/manus-storage/scribe-upload-flow_db2034bc.png", alt: "Scribe upload workflow mockup with file drop zone, category tags, and book details fields." },
+type ScreenImageKey = "dashboard" | "books" | "createBook";
+
+const productScreens: Array<{
+  label: string;
+  title: string;
+  copy: string;
+  imageKey: ScreenImageKey;
+  alt: string;
+}> = [
+  { label: "01 / Library overview", title: "Everything worth keeping, in one place.", copy: "Sort books, essays, course material, and field notes into a library that stays useful long after you save it.", imageKey: "dashboard", alt: "Scribe library dashboard mockup showing books, collections, and reading activity." },
+  { label: "02 / Reading context", title: "A book page that carries the context with it.", copy: "Keep the important details close: author, summary, collections, and your next page, without turning reading into administration.", imageKey: "books", alt: "Scribe book details mockup with a cover, reading progress, and collection information." },
+  { label: "03 / Contribution flow", title: "Make sharing knowledge feel considered.", copy: "A focused upload flow helps contributors add clear details, useful categories, and reliable context before a resource reaches the community.", imageKey: "createBook", alt: "Scribe upload workflow mockup with file drop zone, category tags, and book details fields." },
 ];
 
 const problems = [
@@ -74,7 +82,7 @@ function scrollToSection(id: string) {
 function Logo({ showMark = true }: { showMark?: boolean }) {
   return (
     <Link className="inline-flex items-center gap-2.5 text-[#111111] dark:text-[#FAFAFA]" to="/" aria-label="Scribe home">
-      {showMark && <img src="/manus-storage/scribe-logo-mark_1060d0e5.png" alt="" className="h-9 w-9 object-contain grayscale contrast-125 dark:invert" />}
+      {showMark && <img src="/favicon.png" alt="" className="h-9 w-9 object-contain" />}
       <span className="text-[17px] font-extrabold tracking-[0.105em]">SCRIBE</span>
       <span className="font-mono text-[9px] tracking-[0.075em] text-[#111111]/50 dark:text-[#FAFAFA]/50">THE DIGITAL LIBRARY</span>
     </Link>
@@ -93,14 +101,29 @@ function ThemeToggle() {
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const placeholder = (label: string) => toast(`${label} is coming soon`, { description: "The landing experience is ready; this product workflow is the next chapter." });
   const navigate = (id: string) => { setMenuOpen(false); scrollToSection(id); };
+
+  const screenImage: Record<ScreenImageKey, string> = {
+    dashboard: isDark ? "/dashboard_dark.png" : "/dashboard_light.png",
+    books: isDark ? "/books_dark.png" : "/books_light.png",
+    createBook: isDark ? "/create_book_dark.png" : "/create_book_light.png",
+  };
+    const heroImage = isDark ? "/dashboard_dark.png" : "/dashboard_light.png";
+
+    const screenAspect: Record<ScreenImageKey, string> = {
+      dashboard: "aspect-[1344/768]",
+      books: "aspect-[1366/768]",
+      createBook: "aspect-[1366/704]",
+    };
 
   return (
     <div id="top" className="min-h-screen overflow-x-hidden bg-[#FAFAFA] text-[#111111] transition-colors duration-200 dark:bg-[#111111] dark:text-[#FAFAFA]">
       <header className="sticky top-0 z-40 border-b border-[#111111]/10 bg-[#FAFAFA]/90 backdrop-blur-xl dark:border-[#FAFAFA]/15 dark:bg-[#111111]/90">
         <div className={`${shell} flex h-[73px] items-center justify-between gap-4`}>
-          <Logo showMark={false} />
+          <Logo />
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
             {[["Home", "top"], ["Library", "library"], ["Features", "features"], ["Community", "community"]].map(([label, id]) => <button key={id} className="rounded-lg px-3 py-2 text-[13px] font-semibold text-[#111111]/75 transition hover:bg-[#111111]/5 hover:text-[#111111] dark:text-[#FAFAFA]/75 dark:hover:bg-[#FAFAFA]/10 dark:hover:text-[#FAFAFA]" onClick={() => navigate(id)}>{label}</button>)}
           </nav>
@@ -130,7 +153,7 @@ export default function Home() {
               <div className="absolute -right-2 bottom-10 z-10 flex items-center gap-2 rounded-lg border border-[#111111]/15 bg-[#FAFAFA]/95 px-3 py-2 font-mono text-[10px] shadow-sm dark:border-[#FAFAFA]/20 dark:bg-[#111111]/95"><span className="h-1.5 w-10 overflow-hidden rounded-full bg-[#111111]/15 dark:bg-[#FAFAFA]/15"><i className="block h-full w-[72%] rounded-full bg-[#00C853]" /></span>72% through</div>
               <div className="relative overflow-hidden rounded-xl border border-[#111111]/20 bg-[#FAFAFA] shadow-[0_26px_60px_rgba(17,17,17,.13)] dark:border-[#FAFAFA]/25 dark:bg-[#111111] dark:shadow-[0_26px_60px_rgba(0,0,0,.38)]">
                 <div className="flex h-9 items-center gap-1.5 border-b border-[#111111]/10 px-3 dark:border-[#FAFAFA]/15"><i className="h-1.5 w-1.5 rounded-full bg-[#FF3B30]" /><i className="h-1.5 w-1.5 rounded-full bg-[#00C853]" /><i className="h-1.5 w-1.5 rounded-full bg-[#111111]/25 dark:bg-[#FAFAFA]/25" /><span className="ml-3 rounded bg-[#111111]/5 px-3 py-1 font-mono text-[9px] text-[#111111]/45 dark:bg-[#FAFAFA]/10 dark:text-[#FAFAFA]/45">scribe.app / library</span></div>
-                <img src="/manus-storage/scribe-hero-workspace_5a3099f1.png" alt="Scribe dashboard with personal bookshelf, search, reading progress, and upload controls." className="block aspect-video w-full object-cover grayscale contrast-[.97] dark:brightness-[.86]" />
+                <img src={heroImage} alt="Scribe dashboard with personal bookshelf, search, reading progress, and upload controls." className="block aspect-video w-full object-cover grayscale contrast-[.97] dark:brightness-[.86]" />
               </div>
               <div className="absolute -right-7 top-28 -z-10 hidden items-end gap-1.5 rotate-[6deg] lg:flex"><i className="h-40 w-3 rounded-t bg-[#111111] dark:bg-[#FAFAFA]" /><i className="h-32 w-3 rounded-t bg-[#00C853]" /><i className="h-36 w-3 rounded-t bg-[#FF3B30]" /><i className="h-28 w-3 rounded-t bg-[#111111] dark:bg-[#FAFAFA]" /></div>
             </div>
@@ -152,7 +175,7 @@ export default function Home() {
 
         <section id="library" className="py-24 dark:bg-[#111111] sm:py-32"><div className={shell}>
           <div className="grid gap-7 lg:grid-cols-[200px_1fr_290px] lg:items-end"><div className={eyebrow}><span className="text-[#111111] dark:text-[#FAFAFA]">03</span><span className="mx-2 inline-block h-px w-6 align-middle bg-current" />In practice</div><div><p className={eyebrow}>Designed around the work of learning</p><h2 className="mt-4 text-[clamp(2.5rem,5vw,4.5rem)] font-extrabold leading-[.98] tracking-[-.07em]">Your library, in motion.</h2></div><p className="text-[13px] leading-6 text-[#111111]/65 dark:text-[#FAFAFA]/65">A collection is only useful when it helps you find your next step. Scribe keeps your library useful at every scale.</p></div>
-          <div className="mt-16">{productScreens.map((screen, index) => <article key={screen.title} className={`grid gap-8 border-t border-[#111111]/15 py-12 dark:border-[#FAFAFA]/15 lg:grid-cols-[285px_1fr] lg:items-center lg:gap-16 ${index === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}><div><span className={`${eyebrow} text-[#111111]/65 dark:text-[#FAFAFA]/65`}>{screen.label}</span><h3 className="mt-4 max-w-[280px] text-[26px] font-extrabold leading-[1.08] tracking-[-.055em]">{screen.title}</h3><p className="mt-4 text-[13px] leading-6 text-[#111111]/65 dark:text-[#FAFAFA]/65">{screen.copy}</p><button className="mt-5 inline-flex items-center gap-2 text-[12px] font-bold underline-offset-4 hover:underline" onClick={() => placeholder("Product preview")}>See how it works <ArrowRight size={15} /></button></div><div className="overflow-hidden rounded-xl border border-[#111111]/20 bg-[#FAFAFA] shadow-[0_18px_45px_rgba(17,17,17,.09)] dark:border-[#FAFAFA]/20 dark:bg-[#111111] dark:shadow-[0_18px_45px_rgba(0,0,0,.32)]"><img src={screen.image} alt={screen.alt} className="block aspect-[16/8.25] w-full object-cover grayscale contrast-[.97] dark:brightness-[.86]" /></div></article>)}</div>
+          <div className="mt-16">{productScreens.map((screen, index) => <article key={screen.title} className={`grid gap-8 border-t border-[#111111]/15 py-12 dark:border-[#FAFAFA]/15 lg:grid-cols-[285px_1fr] lg:items-center lg:gap-16 ${index === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}><div><span className={`${eyebrow} text-[#111111]/65 dark:text-[#FAFAFA]/65`}>{screen.label}</span><h3 className="mt-4 max-w-[280px] text-[26px] font-extrabold leading-[1.08] tracking-[-.055em]">{screen.title}</h3><p className="mt-4 text-[13px] leading-6 text-[#111111]/65 dark:text-[#FAFAFA]/65">{screen.copy}</p><button className="mt-5 inline-flex items-center gap-2 text-[12px] font-bold underline-offset-4 hover:underline" onClick={() => placeholder("Product preview")}>See how it works <ArrowRight size={15} /></button></div><div className={`relative overflow-hidden rounded-xl border border-[#111111]/20 bg-[#FAFAFA] shadow-[0_18px_45px_rgba(17,17,17,.09)] ${screenAspect[screen.imageKey]} dark:border-[#FAFAFA]/20 dark:bg-[#111111] dark:shadow-[0_18px_45px_rgba(0,0,0,.32)]`}><img src={screenImage[screen.imageKey]} alt={screen.alt} className="absolute inset-0 h-full w-full object-cover grayscale contrast-[.97] dark:brightness-[.86]" /></div></article>)}</div>
         </div></section>
 
         <section id="workflow" className="bg-[#F4F4F2] py-24 dark:bg-[#171717] sm:py-32"><div className={shell}>
@@ -171,7 +194,7 @@ export default function Home() {
           <div><div className={eyebrow}><span className="text-[#111111] dark:text-[#FAFAFA]">06</span><span className="mx-2 inline-block h-px w-6 align-middle bg-current" />The commons</div><p className={`${eyebrow} mt-6`}>A library powered by people</p><h2 className="mt-4 text-[clamp(2.5rem,5vw,4.5rem)] font-extrabold leading-[.98] tracking-[-.07em]">The more we share, the more we can find.</h2><p className="mt-6 max-w-[480px] text-[15px] leading-7 text-[#111111]/65 dark:text-[#FAFAFA]/65">Scribe connects readers and contributors through shared knowledge and resources. Every collection can be a doorway into a better question.</p><div className="mt-7 flex flex-wrap gap-2">{["Discussions", "Recommendations", "Collections", "Reading notes"].map((label) => <span key={label} className="rounded-full border border-[#111111]/15 bg-transparent px-3 py-2 font-mono text-[10px] text-[#111111]/65 dark:border-[#FAFAFA]/20 dark:text-[#FAFAFA]/65">{label}</span>)}</div></div>
         </div></section>
 
-        <section className="bg-[#FAFAFA] pb-20 dark:bg-[#111111]"><div className={shell}><div className="relative overflow-hidden rounded-2xl bg-[#111111] px-6 py-20 text-center text-[#FAFAFA] sm:px-10 sm:py-24"><div className="mx-auto grid h-12 w-12 place-items-center rounded-lg bg-[#FAFAFA]"><img src="/manus-storage/scribe-logo-mark_1060d0e5.png" alt="" className="h-8 w-8 grayscale contrast-125" /></div><div className={`${eyebrow} mt-7 text-[#FAFAFA]/55`}><span className="text-[#FAFAFA]">07</span><span className="mx-2 inline-block h-px w-6 align-middle bg-current" />Return to shelf</div><p className={`${eyebrow} mt-5 text-[#FAFAFA]/55`}>A place to return to</p><h2 className="mx-auto mt-4 max-w-[800px] text-[clamp(2.8rem,5vw,5rem)] font-extrabold leading-[.95] tracking-[-.075em]">Build the library you return to.</h2><div className="mt-8 flex flex-wrap justify-center gap-3"><Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#FAFAFA] px-5 text-[13px] font-bold text-[#111111] transition hover:opacity-85" to="/dashboard/home">Organize your library <ArrowRight size={17} /></Link><Link className="inline-flex min-h-11 items-center rounded-full border border-[#FAFAFA]/30 px-5 text-[13px] font-bold transition hover:bg-[#FAFAFA]/10" to="/dashboard/books">Browse the shelves</Link></div><span className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] text-[#FAFAFA]/55"><Clock3 size={13} /> Keep every useful thing you read within reach.</span></div></div></section>
+        <section className="bg-[#FAFAFA] pb-20 dark:bg-[#111111]"><div className={shell}><div className="relative overflow-hidden rounded-2xl bg-[#111111] px-6 py-20 text-center text-[#FAFAFA] sm:px-10 sm:py-24"><div className="mx-auto grid h-12 w-12 place-items-center rounded-lg bg-[#FAFAFA]"><img src="/favicon.png" alt="" className="h-8 w-8" /></div><div className={`${eyebrow} mt-7 text-[#FAFAFA]/55`}><span className="text-[#FAFAFA]">07</span><span className="mx-2 inline-block h-px w-6 align-middle bg-current" />Return to shelf</div><p className={`${eyebrow} mt-5 text-[#FAFAFA]/55`}>A place to return to</p><h2 className="mx-auto mt-4 max-w-[800px] text-[clamp(2.8rem,5vw,5rem)] font-extrabold leading-[.95] tracking-[-.075em]">Build the library you return to.</h2><div className="mt-8 flex flex-wrap justify-center gap-3"><Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#FAFAFA] px-5 text-[13px] font-bold text-[#111111] transition hover:opacity-85" to="/dashboard/home">Organize your library <ArrowRight size={17} /></Link><Link className="inline-flex min-h-11 items-center rounded-full border border-[#FAFAFA]/30 px-5 text-[13px] font-bold transition hover:bg-[#FAFAFA]/10" to="/dashboard/books">Browse the shelves</Link></div><span className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] text-[#FAFAFA]/55"><Clock3 size={13} /> Keep every useful thing you read within reach.</span></div></div></section>
       </main>
 
       <footer className="border-t border-[#111111]/10 bg-[#F4F4F2] py-14 dark:border-[#FAFAFA]/15 dark:bg-[#171717]"><div className={`${shell} grid gap-12 lg:grid-cols-[1.1fr_1.9fr]`}><div><Logo /><p className="mt-5 max-w-[270px] text-[12px] leading-5 text-[#111111]/60 dark:text-[#FAFAFA]/60">A calm, capable home for every book and resource that shapes your thinking.</p><span className="mt-6 block font-mono text-[10px] text-[#111111]/45 dark:text-[#FAFAFA]/45">© 2026 Scribe Library</span></div><div className="grid grid-cols-2 gap-8 sm:grid-cols-4">{[["Product", ["Features", "Library", "Reading progress"]], ["Resources", ["Guides", "Help centre", "Scribe notes"]], ["Community", ["Collections", "Contributors", "Discussions"]], ["Company", ["About", "Careers", "Contact"]]].map(([group, links]) => <div key={group as string} className="flex flex-col items-start gap-3"><h3 className="mb-1 text-[11px] font-extrabold">{group as string}</h3>{(links as string[]).map((label) => <button key={label} className="text-left text-[11px] font-medium text-[#111111]/60 transition hover:text-[#111111] dark:text-[#FAFAFA]/60 dark:hover:text-[#FAFAFA]" onClick={() => placeholder(label)}>{label}</button>)}</div>)}</div></div></footer>
