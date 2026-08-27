@@ -35,7 +35,7 @@
     // Recommended Options
     // "noEmit": true,
     "outDir": "./dist",
-    "allowImportingTsExtensions": true,
+    // "allowImportingTsExtensions": true,
     "strict": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
