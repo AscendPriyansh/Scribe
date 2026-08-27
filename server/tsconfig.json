@@ -8,19 +8,14 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    /* File Layout */
-    "rootDir": "./src",
-    "outDir": "./dist",
-
-    /* Output Customizations */
-    "sourceMap": true,
-    "declaration": false,
+    /* Output: run via tsx, so only typecheck (no JS emit) */
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
 
     /* Strict Typechecking */
     "strict": true,
-    "noImplicitAny": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "server.ts", "dbcheck.ts"],
   "exclude": ["node_modules", "dist"]
 }
