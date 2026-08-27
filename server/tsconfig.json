@@ -33,7 +33,8 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
-    "noEmit": true,
+    // "noEmit": true,
+    "outDir": "./dist",
     "allowImportingTsExtensions": true,
     "strict": true,
     "jsx": "react-jsx",
