@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "tsc server.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
