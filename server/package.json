@@ -8,9 +8,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon --exec tsx server.ts",
     "build": "tsc",
-    "start": "tsc server.js"
+    "start": "tsx server.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -39,6 +39,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.3",
     "multer": "^2.2.0",
+    "tsx": "^4.23.12",
     "zod": "^4.4.3"
   }
 }
